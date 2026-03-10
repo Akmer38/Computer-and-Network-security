@@ -1,1 +1,204 @@
-🌐 Cisco Ağlarında EIGRP Yapılandırması ve Yedeklilik Testi🧩 Proje ÖzetiBu proje, Cisco Router'lar ve bilgisayarlar arasında EIGRP (Enhanced Interior Gateway Routing Protocol) kullanılarak bir ağ altyapısının kurulmasını, yönlendirme tablolarının analizini ve hat yedekliliğinin (redundancy) test edilmesini kapsamaktadır. Proje süresince metrik hesaplamaları yapılmış ve alternatif rota senaryoları simüle edilmiştir.🔧 Gerçekleştirilen Yapılandırmalar1. Router Arayüz AyarlarıR1 Router: Tüm fiziksel arayüzler ilgili IP bloklarına göre yapılandırılmış ve aktif hale getirilmiştir.Bağlantı Kontrolü: Arayüzlerin temel durumları (UP/DOWN) ve IP adresleri show ip interface brief komutuyla doğrulanmıştır.2. EIGRP Yapılandırması (AS 1)Tüm router'larda Autonomous System 1 kullanılarak EIGRP protokolü aktif edilmiştir.Auto-summary özelliği devre dışı bırakılarak daha spesifik yönlendirme yapılması sağlanmıştır.Passive-interface: Gereksiz trafik oluşumunu engellemek amacıyla PC0 ve PC1'in bağlı olduğu ağlara yönelik EIGRP güncellemeleri kısıtlanmıştır.📊 3. EIGRP Maliyet (Cost) ve Metrik Hesaplamaları192.168.4.0/24 ağına ulaşmak için mevcut üç farklı rota üzerinden bant genişliği ve gecikme (delay) değerleri analiz edilmiştir:Rotaİzlenen YolBant Genişliği (BW)Gecikme (Delay)Rota 1R1 → R3 → R5 → PC170 Mbps342 µsRota 2R1 → R4 → R5 → PC165 Mbps400 µsRota 3R1 → R2 → R5 → PC180 Mbps350 µs📌 Sonuç: Yapılan hesaplamalar neticesinde en düşük maliyetli (best path) yol Rota 1 olarak belirlenmiş ve yönlendirme tablosuna (show ip route) dahil edilmiştir.🔍 4. İzleme ve Test SenaryolarıTrace Route TestiPC0 üzerinden PC1'e traceroute komutu gönderilerek paketlerin ağ üzerindeki rotası anlık olarak takip edilmiştir.Yedeklilik (Redundancy) DeneyiDurum Kaydı: Cihazların güncel konfigürasyonları show running-config ile kontrol edilip RAM üzerinde doğrulanmıştır.Hata Simülasyonu: R4 Router'ı fiziksel olarak kapatılmıştır.Dinamik Rota Değişimi: EIGRP'nin hızlı yakınsama (convergence) özelliği sayesinde ağ trafiği otomatik olarak alternatif yola yönlendirilmiştir.Yeni Rota: PC0 → R1 → R3 → R5 → PC1🛠 Kullanılan Temel Cisco KomutlarıProje süresince ağ yönetimi ve sorun giderme için kullanılan kritik komutlar:show running-config: RAM üzerindeki anlık yapılandırmayı görüntüler.show startup-config: NVRAM üzerindeki başlangıç yapılandırmasını gösterir.show ip interface brief: Arayüzlerin özet durumunu ve IP bilgilerini listeler.show ip route: Router'ın öğrendiği yönlendirme tablosunu gösterir.show version: IOS sürümü ve donanım bilgilerini sağlar.show flash: Flash bellek içindeki dosyaları listeler.
+🛡️ Computer and Network Security
+📡 Cisco Show Commands Guide
+
+Bu doküman, Cisco Router ve Switch cihazlarında kullanılan temel show komutlarını açıklamak amacıyla hazırlanmıştır.
+
+📌 Bu komutlar sayesinde:
+
+cihaz yapılandırması incelenebilir
+
+ağ bağlantıları kontrol edilebilir
+
+sistem durumu analiz edilebilir
+
+hata ve log kayıtları görüntülenebilir
+
+📚 İçindekiler
+
+🔧 Configuration Commands
+
+🌐 Interface Commands
+
+🖥️ System Commands
+
+🔀 Network Commands
+
+📊 Monitoring Commands
+
+🔧 Configuration Commands
+1️⃣ show running-config
+
+📌 Cihazın aktif yapılandırmasını gösterir
+
+Bu komut cihazın RAM üzerinde çalışan mevcut konfigürasyonunu görüntüler.
+
+⚠️ Eğer yapılandırma kaydedilmezse cihaz yeniden başlatıldığında kaybolur.
+
+💻 Komut
+Router# show running-config
+2️⃣ show startup-config
+
+📌 Cihazın başlangıç yapılandırmasını gösterir
+
+Bu komut NVRAM içinde kayıtlı olan konfigürasyonu görüntüler.
+
+📌 Router yeniden başlatıldığında bu yapılandırma yüklenir.
+
+💻 Komut
+Router# show startup-config
+🌐 Interface Commands
+3️⃣ show ip interface brief
+
+📌 Tüm arayüzlerin özet durumunu gösterir
+
+Bu komut aşağıdaki bilgileri hızlıca görmemizi sağlar:
+
+✔ IP adresi
+✔ Interface durumu
+✔ Protocol durumu
+
+💻 Komut
+Router# show ip interface brief
+📊 Örnek Çıktı
+Interface              IP-Address      OK? Method Status                Protocol
+FastEthernet0/0       192.168.1.1     YES manual up                    up
+FastEthernet0/1       unassigned      YES unset  administratively down down
+4️⃣ show interfaces
+
+📌 Interface hakkında detaylı bilgi verir
+
+Bu komut şu bilgileri gösterir:
+
+📦 paket sayısı
+⚠ hata sayısı
+📶 bant genişliği
+📊 trafik istatistikleri
+
+💻 Komut
+Router# show interfaces FastEthernet0/0
+🖥️ System Commands
+5️⃣ show version
+
+📌 Cihazın sistem bilgilerini gösterir
+
+Gösterilen bilgiler:
+
+🧠 işlemci
+💾 bellek
+📀 IOS versiyonu
+⏱ uptime
+
+💻 Komut
+Router# show version
+📊 Örnek Çıktı
+Cisco IOS Software, Version 12.4
+System uptime is 2 hours, 30 minutes
+Processor board ID FTX1234A1BC
+Configuration register is 0x2102
+6️⃣ show clock
+
+📌 Cihazın sistem saatini gösterir
+
+💻 Komut
+Router# show clock
+7️⃣ show processes
+
+📌 CPU ve çalışan süreçleri gösterir
+
+Bu komut sayesinde:
+
+⚙ çalışan işlemler
+📊 CPU kullanımı
+
+görüntülenebilir.
+
+💻 Komut
+Router# show processes
+🔀 Network Commands
+8️⃣ show ip route
+
+📌 Router'ın yönlendirme tablosunu gösterir
+
+Gösterdiği bilgiler:
+
+🌐 ağ yolları
+📍 next-hop adresleri
+🔁 routing protokolleri
+
+💻 Komut
+Router# show ip route
+9️⃣ show arp
+
+📌 IP – MAC eşleştirme tablosunu gösterir
+
+ARP tablosu cihazın hangi IP adresinin hangi MAC adresine ait olduğunu gösterir.
+
+💻 Komut
+Router# show arp
+📊 Örnek Çıktı
+Protocol  Address          Age (min)  Hardware Addr   Type   Interface
+Internet  192.168.1.10     2          00:1A:2B:3C:4D:5E  ARPA   FastEthernet0/0
+🔁 Switch Commands
+🔟 show mac address-table
+
+📌 Switch üzerindeki MAC adreslerini gösterir
+
+Bu komut sayesinde:
+
+📡 cihazların hangi porta bağlı olduğu
+🔗 MAC adresleri
+
+görülebilir.
+
+💻 Komut
+Switch# show mac address-table
+1️⃣1️⃣ show vlan brief
+
+📌 Switch üzerindeki VLAN yapılandırmasını gösterir
+
+💻 Komut
+Switch# show vlan brief
+📊 Örnek Çıktı
+VLAN Name                             Status    Ports
+1    default                          active    Fa0/1, Fa0/2, Fa0/3
+10   Sales                            active    Fa0/4, Fa0/5
+20   IT                               active    Fa0/6, Fa0/7
+📊 Monitoring Commands
+1️⃣2️⃣ show logging
+
+📌 Cihazın log kayıtlarını gösterir
+
+Bu loglar:
+
+⚠ hatalar
+ℹ bilgilendirmeler
+🚨 uyarılar
+
+içerebilir.
+
+Router# show logging
+1️⃣3️⃣ show users
+
+📌 Cihaza bağlı kullanıcıları gösterir
+
+Router# show users
+1️⃣4️⃣ show history
+
+📌 Girilen komut geçmişini gösterir
+
+Router# show history
+1️⃣5️⃣ show flash
+
+📌 Flash bellekteki dosyaları listeler
+
+Router# show flash
+📌 Summary
+
+Bu dokümanda Cisco cihazlarında kullanılan en önemli show komutları açıklanmıştır.
+
+Bu komutlar sayesinde:
+
+✔ cihaz yapılandırması kontrol edilir
+✔ ağ bağlantıları incelenir
+✔ sistem durumu analiz edilir
+✔ sorun giderme yapılır
